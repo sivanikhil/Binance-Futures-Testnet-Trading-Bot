@@ -22,16 +22,68 @@ st.set_page_config(
 st.markdown(
     """
     <style>
+    .stApp {
+        background:
+            radial-gradient(circle at top left, rgba(14, 165, 233, 0.20), transparent 34rem),
+            radial-gradient(circle at top right, rgba(34, 197, 94, 0.18), transparent 30rem),
+            linear-gradient(135deg, #020617 0%, #0f172a 52%, #111827 100%);
+        background-size: 120% 120%;
+        animation: bgShift 12s ease-in-out infinite alternate;
+        color: #e5e7eb;
+    }
+    @keyframes bgShift {
+        0% { background-position: 0% 0%; }
+        100% { background-position: 100% 55%; }
+    }
+    .stApp::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+            linear-gradient(rgba(148, 163, 184, 0.045) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(148, 163, 184, 0.045) 1px, transparent 1px);
+        background-size: 42px 42px;
+        mask-image: linear-gradient(to bottom, rgba(0,0,0,0.80), transparent 82%);
+        animation: gridDrift 18s linear infinite;
+    }
+    @keyframes gridDrift {
+        from { transform: translateY(0); }
+        to { transform: translateY(42px); }
+    }
     .main .block-container {
         padding-top: 2rem;
         max-width: 1180px;
     }
     .hero {
-        padding: 1.4rem 1.6rem;
-        border-radius: 14px;
-        background: linear-gradient(135deg, #0f172a 0%, #111827 55%, #064e3b 100%);
+        position: relative;
+        overflow: hidden;
+        padding: 1.7rem 1.8rem;
+        border-radius: 18px;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.94) 0%, rgba(17, 24, 39, 0.92) 55%, rgba(6, 78, 59, 0.92) 100%);
         color: white;
         margin-bottom: 1.2rem;
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        box-shadow: 0 22px 60px rgba(0, 0, 0, 0.35);
+        animation: fadeUp 650ms ease-out both;
+    }
+    .hero::after {
+        content: "";
+        position: absolute;
+        width: 18rem;
+        height: 18rem;
+        right: -7rem;
+        top: -7rem;
+        background: radial-gradient(circle, rgba(56, 189, 248, 0.34), transparent 65%);
+        animation: floatGlow 5s ease-in-out infinite alternate;
+    }
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(14px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes floatGlow {
+        from { transform: translate3d(0, 0, 0) scale(1); opacity: 0.72; }
+        to { transform: translate3d(-34px, 24px, 0) scale(1.08); opacity: 1; }
     }
     .hero h1 {
         margin: 0;
@@ -41,11 +93,135 @@ st.markdown(
         margin: 0.35rem 0 0;
         color: #cbd5e1;
     }
-    .status-card {
+    .ticker-strip {
+        display: flex;
+        gap: 0.75rem;
+        overflow: hidden;
+        margin: 0.75rem 0 1.35rem;
+        padding: 0.35rem 0;
+    }
+    .ticker-track {
+        display: flex;
+        gap: 0.75rem;
+        min-width: max-content;
+        animation: tickerMove 18s linear infinite;
+    }
+    .ticker-chip {
+        padding: 0.55rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.82);
+        border: 1px solid rgba(56, 189, 248, 0.22);
+        color: #e0f2fe;
+        white-space: nowrap;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+    }
+    @keyframes tickerMove {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+    }
+    [data-testid="stSidebar"] {
+        background: rgba(2, 6, 23, 0.94);
+        border-right: 1px solid rgba(148, 163, 184, 0.16);
+    }
+    [data-testid="stSidebar"] * {
+        color: #e5e7eb;
+    }
+    [data-testid="stVerticalBlockBorderWrapper"],
+    div[data-testid="stForm"] {
+        background: rgba(15, 23, 42, 0.74);
+        border: 1px solid rgba(148, 163, 184, 0.20);
+        border-radius: 16px;
         padding: 1rem;
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
+        animation: fadeUp 760ms ease-out both;
+    }
+    h1, h2, h3, h4, label, .stMarkdown, .stCaptionContainer {
+        color: #e5e7eb !important;
+    }
+    .stTextInput input,
+    .stSelectbox [data-baseweb="select"] {
+        background-color: rgba(15, 23, 42, 0.95);
+        color: #f8fafc;
+        border-color: rgba(148, 163, 184, 0.35);
+        border-radius: 10px;
+    }
+    .stTextInput input:focus {
+        border-color: #38bdf8;
+        box-shadow: 0 0 0 1px #38bdf8;
+    }
+    [data-testid="stMetric"] {
+        background: rgba(15, 23, 42, 0.78);
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        border-radius: 14px;
+        padding: 0.9rem 1rem;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.20);
+        transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+    [data-testid="stMetric"]:hover {
+        transform: translateY(-3px);
+        border-color: rgba(56, 189, 248, 0.55);
+        box-shadow: 0 18px 38px rgba(14, 165, 233, 0.18);
+    }
+    [data-testid="stMetricLabel"],
+    [data-testid="stMetricValue"] {
+        color: #f8fafc !important;
+    }
+    .stButton button {
         border-radius: 12px;
-        border: 1px solid #e5e7eb;
-        background: #ffffff;
+        border: 0;
+        background: linear-gradient(135deg, #0ea5e9, #22c55e, #0ea5e9);
+        background-size: 220% 220%;
+        color: white;
+        font-weight: 700;
+        min-height: 3rem;
+        box-shadow: 0 14px 32px rgba(14, 165, 233, 0.24);
+        animation: buttonFlow 4s ease infinite;
+        transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+    }
+    @keyframes buttonFlow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .stButton button:hover {
+        border: 0;
+        filter: brightness(1.08);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 18px 42px rgba(34, 197, 94, 0.22);
+    }
+    div[data-testid="stAlert"] {
+        border-radius: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.20);
+    }
+    hr {
+        border-color: rgba(148, 163, 184, 0.18);
+    }
+    .live-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.45rem 0.7rem;
+        border-radius: 999px;
+        background: rgba(34, 197, 94, 0.12);
+        border: 1px solid rgba(34, 197, 94, 0.28);
+        color: #bbf7d0;
+        font-size: 0.9rem;
+        font-weight: 650;
+        margin-bottom: 0.75rem;
+    }
+    .live-dot {
+        width: 0.55rem;
+        height: 0.55rem;
+        border-radius: 999px;
+        background: #22c55e;
+        box-shadow: 0 0 0 rgba(34, 197, 94, 0.55);
+        animation: pulseDot 1.6s infinite;
+    }
+    @keyframes pulseDot {
+        0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.60); }
+        70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
     }
     </style>
     """,
@@ -82,6 +258,26 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+st.markdown(
+    """
+    <div class="ticker-strip">
+      <div class="ticker-track">
+        <span class="ticker-chip">BTCUSDT • Live Price Preview</span>
+        <span class="ticker-chip">Dry Run Mode • No API Keys</span>
+        <span class="ticker-chip">Market / Limit Orders</span>
+        <span class="ticker-chip">Validation + Estimated Value</span>
+        <span class="ticker-chip">Safe Public Demo</span>
+        <span class="ticker-chip">BTCUSDT • Live Price Preview</span>
+        <span class="ticker-chip">Dry Run Mode • No API Keys</span>
+        <span class="ticker-chip">Market / Limit Orders</span>
+        <span class="ticker-chip">Validation + Estimated Value</span>
+        <span class="ticker-chip">Safe Public Demo</span>
+      </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 with st.sidebar:
     st.header("About")
     st.write(
@@ -108,6 +304,10 @@ with form_col:
 
 with market_col:
     st.subheader("Market Snapshot")
+    st.markdown(
+        '<div class="live-pill"><span class="live-dot"></span>Live public testnet price</div>',
+        unsafe_allow_html=True,
+    )
     latest_price, price_error = fetch_latest_price(symbol)
     qty_decimal = parse_decimal(quantity)
 
