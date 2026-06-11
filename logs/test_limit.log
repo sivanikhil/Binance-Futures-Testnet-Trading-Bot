@@ -1,0 +1,2 @@
+2026-06-11T19:41:40+0530 | INFO | trading_bot | Order request summary | dry_run=True order={'symbol': 'BTCUSDT', 'side': 'SELL', 'type': 'LIMIT', 'quantity': '0.001', 'price': '120000', 'timeInForce': 'GTC'}
+2026-06-11T19:41:40+0530 | INFO | trading_bot | Dry run successful | order={'symbol': 'BTCUSDT', 'side': 'SELL', 'type': 'LIMIT', 'quantity': '0.001', 'price': '120000', 'timeInForce': 'GTC'}

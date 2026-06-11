@@ -1,0 +1,2 @@
+2026-06-11T19:41:39+0530 | INFO | trading_bot | Order request summary | dry_run=True order={'symbol': 'BTCUSDT', 'side': 'BUY', 'type': 'MARKET', 'quantity': '0.001'}
+2026-06-11T19:41:39+0530 | INFO | trading_bot | Dry run successful | order={'symbol': 'BTCUSDT', 'side': 'BUY', 'type': 'MARKET', 'quantity': '0.001'}
