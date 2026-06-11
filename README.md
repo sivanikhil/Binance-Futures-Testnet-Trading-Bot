@@ -73,6 +73,24 @@ Use a custom log path:
 python trading_bot/cli.py --symbol BTCUSDT --side BUY --type MARKET --quantity 0.001 --log-file logs/market_order.log
 ```
 
+## Optional Interactive Demo
+
+This project also includes a lightweight Streamlit dry-run UI. It validates order input and shows the request payload without sending real API requests or requiring API keys.
+
+Run it locally:
+
+```bash
+streamlit run streamlit_app.py
+```
+
+For a public demo, deploy this repository on Streamlit Community Cloud and select:
+
+```text
+streamlit_app.py
+```
+
+Do not enter real API keys into a public demo. Use the CLI for real Binance Futures Testnet orders.
+
 ## Output
 
 The CLI prints:
@@ -104,4 +122,3 @@ Sample dry-run logs are included in `logs/sample_market_order.log` and `logs/sam
 - API credentials are loaded from environment variables or `.env`.
 - `LIMIT` orders use `timeInForce=GTC`.
 - The app validates basic shape and positivity of values locally. Binance remains the source of truth for symbol filters, precision, leverage, balances, and margin requirements.
-
